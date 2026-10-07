@@ -2,6 +2,19 @@ const r = require("raylib");
 
 function running() { return !r.WindowShouldClose(); }
 
+function getRandomColorComponent() {
+  return Math.random() * 255;
+}
+
+function getRandomColor(randomAlpha) {
+  return {
+    r: getRandomColorComponent(),
+    g: getRandomColorComponent(),
+    b: getRandomColorComponent(),
+    a: randomAlpha ? getRandomColorComponent() : 255,
+  };
+}
+
 function init() {
   const world = {};
 
@@ -13,7 +26,7 @@ function init() {
   world.cellMaxWidth = r.GetScreenWidth() / 10;
   world.cellMaxHeight = r.GetScreenHeight() / 10;
 
-  world.color = r.BLANK;
+  world.color = getRandomColor();
 
   return world;
 }
@@ -28,23 +41,20 @@ function setup(width, height, title) {
   return world;
 }
 
-function getColorComponent() {
-  return Math.random() * 255;
+function getRandomNumber(max) {
+  return Math.random() * max;
 }
 
 function update(world) {
-  world.cellWidth = Math.random() * world.cellMaxWidth;
-  world.cellHeight = Math.random() * world.cellMaxHeight;
+  world.cellWidth = getRandomNumber(world.cellMaxWidth);
+  world.cellHeight = getRandomNumber(world.cellMaxHeight);
 
-  world.x = Math.random() * (r.GetScreenWidth() - world.cellWidth);
-  world.y = Math.random() * (r.GetScreenHeight() - world.cellHeight);
+  world.x = getRandomNumber(r.GetScreenWidth() - world.cellWidth);
+  world.y = getRandomNumber(r.GetScreenHeight() - world.cellHeight);
 
-  world.color = {
-    r: getColorComponent(),
-    g: getColorComponent(),
-    b: getColorComponent(),
-    a: 255,
-  }
+  world.color = getRandomColor(false);
+
+  return world;
 }
 
 function draw(world) {
@@ -55,6 +65,8 @@ function draw(world) {
   r.DrawRectangle(world.x, world.y, world.cellWidth, world.cellHeight, world.color);
 
   r.EndDrawing();
+
+  return world;
 }
 
 function teardown() { r.CloseWindow(); }

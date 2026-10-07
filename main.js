@@ -2,8 +2,8 @@ const sketch = require("./sketch");
 
 function loop(world) {
   while (sketch.running()) {
-    sketch.update(world);
-    sketch.draw(world);
+    world = sketch.update(world);
+    world = sketch.draw(world);
   }
 }
 
